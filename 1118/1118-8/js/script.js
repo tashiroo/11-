@@ -6,7 +6,7 @@
     constructor(canvas,level) {
      this.canvas = canvas;
      this.level = level;
-     this.ctx = this.canvas.getContext("2d")
+     this.ctx = this.canvas.getContext("2d");
      this.tiles = [
        [0, 1, 2, 3],
        [4, 5, 6, 7],
