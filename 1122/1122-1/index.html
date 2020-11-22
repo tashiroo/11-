@@ -1,12 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="./css/style.css">
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
-  <script src="js/script.js"></script>
+  <div id = "root"></div>
+  <script type="text/babel">
+    (() =>{
+      const todos = [
+        {id: 0, title: "Task 0" , isDone: false},
+        {id: 1, title: "Task 1" , isDone: false},
+        {id: 2, title: "Task 2" , isDone: true},
+      ];
+
+      function TodoItem(props) {
+        return (
+          <li key={props.todo.id}>
+          <label>
+          <input type="checkbox"
+          checked = {props.todo.isDone}
+          onChange={() => props.checkTodo(props.todo)}
+          />
+          <span className={props.todo.isDone ? "done" : ""}>
+          {props.todo.title}
+          </span>
+          </label>
+          </li>
+        );
+      }
+
+      function TodoList(props) {
+        const todos = props.todos.map(todo => {
+          return (
+            <TodoItem
+            key ={todo.id}
+            todo = {todo}
+            checkTodo={props.checkTodo}
+            />
+        );
+        });
+        return(
+            <ul>
+            {todos}
+            </ul>
+        )
+      }
+      class App extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            todos :todos
+          };
+          this.checkTodo = this.checkTodo.bind(this);
+        }
+        checkTodo(todo) {
+          const todos = this.state.todos.map(todo => {
+            return {id:todo.id,title:todo.title, isDone: todo.isDone};
+          });
+
+          const pos = this.state.todos.map(todo => {
+              return todo.id;
+          }).indexOf(todo.id);
+
+        todos[pos].isDone = !todos[pos].isDone;
+        this.setState({
+          todos: todos
+        });
+        }
+
+        render() {
+          return (
+            <div className="container">
+            <h1>My Todos</h1>
+            <TodoList
+             todos = {this.state.todos}
+             checkTodo = {this.checkTodo}/>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render (
+        <App/>,
+        document.getElementById("root")
+      );
+    })();
+  </script>
 </body>
 </html>
+
+<!-- スタイルを整えよう-->
